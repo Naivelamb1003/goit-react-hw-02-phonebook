@@ -1,34 +1,34 @@
 import { Component } from "react";
 import "./App.css";
 import { v4 as uuidv4 } from "uuid";
+import ContactForm from "./components/ContactForm/ContactForm";
+import ContactList from "./components/ContactList/ContactList";
 
 class App extends Component {
   state = {
-    contacts: [],
-    name: "",
+    contacts: [
+      { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
+      { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
+      { id: "id-3", name: "Eden Clements", number: "645-17-79" },
+      { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
+    ],
+    filter: "",
   };
 
-  handleNameChange = (event) => {
-    this.setState({ name: event.currentTarget.value });
-  };
-  reset = () => {
-    this.setState({ name: "" });
-  };
-
-  handleAdd = (event) => {
-    event.preventDefault();
-
+  addHandler = (contactFormState) => {
     this.setState((prevState) => {
       return {
-        contacts: prevState.contacts.push({
-          name: prevState.name,
+        contacts: prevState.contacts.concat({
+          name: contactFormState.name,
+          number: contactFormState.number,
           id: uuidv4(),
         }),
       };
     });
-    console.log(this.state.contacts);
-    this.state.contacts.forEach(c=>console.log(c.name));
-    this.reset();
+  };
+
+  filterContact = (name) => {
+    return name.toLowerCase().indexOf(this.state.filter.toLowerCase()) != -1;
   };
 
   render() {
@@ -36,27 +36,22 @@ class App extends Component {
       <div>
         <div>
           <h1>Phonebook</h1>
-          <form onSubmit={this.handleAdd}>
-            <label>
-              Name
-              <input
-                type="text"
-                value={this.state.name}
-                onChange={this.handleNameChange}
-              />
-            </label>
-            <button type="submit">Add contact</button>
-          </form>
+          <ContactForm onSubmit={this.addHandler} />
         </div>
+
         <div>
           <h1>Contacts</h1>
-
-          <ul>
-            {
-            this.state.contacts/* {this.state.contacts.map((contact) => (
-              <li key={contact.id}>{contact.name}</li>
-            ))} */}
-          </ul>
+          <p>Find contacts by name</p>
+          <input
+            type="text"
+            name="filter"
+            value={this.state.filter}
+            onChange={this.handleChange}
+          />
+          <ContactList
+            contacts={this.state.contacts}
+            filterCallback={this.filterContact}
+          />
         </div>
       </div>
     );
