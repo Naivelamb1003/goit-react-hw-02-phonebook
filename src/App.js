@@ -3,6 +3,7 @@ import "./App.css";
 import { v4 as uuidv4 } from "uuid";
 import ContactForm from "./components/ContactForm/ContactForm";
 import ContactList from "./components/ContactList/ContactList";
+import Filter from "./components/Filter/Filter";
 
 class App extends Component {
   state = {
@@ -15,20 +16,53 @@ class App extends Component {
     filter: "",
   };
 
-  addHandler = (contactFormState) => {
+  constructor(){
+    super();
+    this.deletedContacts.bind(this);
+  }
+
+  isContactExist = (value) => {
+    const element = this.state.contacts.find(
+      (contact) => contact.name === value
+    );
+    return element !== undefined;
+  };
+
+  deletedContacts = (e) => {
+    console.log(e.target.id);
     this.setState((prevState) => {
       return {
-        contacts: prevState.contacts.concat({
-          name: contactFormState.name,
-          number: contactFormState.number,
-          id: uuidv4(),
-        }),
+        contacts: [
+          ...prevState.contacts.filter(({ id }) => id !== e.target.id),
+        ],
       };
     });
   };
 
+  addHandler = (contactFormState) => {
+    if (this.isContactExist(contactFormState.name)) {
+      alert(`${contactFormState.name} is already in contacts.`);
+    } else {
+      this.setState((prevState) => {
+        return {
+          contacts: prevState.contacts.concat({
+            name: contactFormState.name,
+            number: contactFormState.number,
+            id: uuidv4(),
+          }),
+        };
+      });
+    }
+  };
+
+  handleChange = (event) => {
+    this.setState({
+      filter: event.currentTarget.value,
+    });
+  };
+
   filterContact = (name) => {
-    return name.toLowerCase().indexOf(this.state.filter.toLowerCase()) != -1;
+    return name.toLowerCase().indexOf(this.state.filter.toLowerCase()) !== -1;
   };
 
   render() {
@@ -42,15 +76,11 @@ class App extends Component {
         <div>
           <h1>Contacts</h1>
           <p>Find contacts by name</p>
-          <input
-            type="text"
-            name="filter"
-            value={this.state.filter}
-            onChange={this.handleChange}
-          />
+          <Filter filter={this.state.filter} handleChange={this.handleChange} />
           <ContactList
             contacts={this.state.contacts}
             filterCallback={this.filterContact}
+            deletedContacts={this.deletedContacts}
           />
         </div>
       </div>

@@ -1,7 +1,7 @@
 import ContactListItem from "../ContactListItem/ContactListItem";
 import PropTypes from "prop-types";
 
-const ContactList = ({ contacts, filterCallback }) => {
+const ContactList = ({ contacts, filterCallback, deletedContacts }) => {
   return (
     <ul>
       {contacts
@@ -11,9 +11,10 @@ const ContactList = ({ contacts, filterCallback }) => {
         )
         .map((contact) => (
           <ContactListItem
-            key={contact.id}
+            id={contact.id}
             name={contact.name}
             number={contact.number}
+            deletedContacts={deletedContacts}
           />
         ))}
     </ul>
@@ -22,6 +23,7 @@ const ContactList = ({ contacts, filterCallback }) => {
 
 ContactList.propTypes = {
   cotacts: PropTypes.array,
+  deletedContacts: PropTypes.func,
 };
 
 export default ContactList;
