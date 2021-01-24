@@ -40,7 +40,8 @@ class App extends Component {
   };
 
   addHandler = (contactFormState) => {
-    if (this.isContactExist(contactFormState.name)) {
+    console.log(contactFormState.name.length);
+    if (this.isContactExist(contactFormState.name) || contactFormState.name.length === 0) {
       alert(`${contactFormState.name} is already in contacts.`);
     } else {
       this.setState((prevState) => {
