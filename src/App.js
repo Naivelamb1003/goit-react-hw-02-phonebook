@@ -1,5 +1,5 @@
 import { Component } from "react";
-import "./App.css";
+import style from "./App.module.css";
 import { v4 as uuidv4 } from "uuid";
 import ContactForm from "./components/ContactForm/ContactForm";
 import ContactList from "./components/ContactList/ContactList";
@@ -67,15 +67,15 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <div className={style.container}>
         <div>
-          <h1>Phonebook</h1>
+          <h1 className={style.title}>Phonebook</h1>
           <ContactForm onSubmit={this.addHandler} />
         </div>
 
         <div>
-          <h1>Contacts</h1>
-          <p>Find contacts by name</p>
+          <h1 className={style.title}>Contacts</h1>
+          <p className={style.title}>Find contacts by name</p>
           <Filter filter={this.state.filter} handleChange={this.handleChange} />
           <ContactList
             contacts={this.state.contacts}

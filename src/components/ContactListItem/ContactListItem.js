@@ -1,10 +1,11 @@
 import PropTypes from "prop-types";
+import style from './ContactListItem.module.css';
 
 const ContactListItem = ({id, number, name, deletedContacts}) => {
   return (
-    <li key={id}>
+    <li key={id} className={style.listitem}>
       {name}: {number}
-      <button type="button" id={id} onClick={deletedContacts}>
+      <button type="button" id={id} onClick={deletedContacts} className={style.btlist}>
             Delete
           </button>
     </li>
