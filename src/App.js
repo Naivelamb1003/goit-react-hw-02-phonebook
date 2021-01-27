@@ -16,11 +16,7 @@ class App extends Component {
     filter: "",
   };
 
-  constructor(){
-    super();
-    this.deletedContacts.bind(this);
-  }
-
+ 
   isContactExist = (value) => {
     const element = this.state.contacts.find(
       (contact) => contact.name === value
